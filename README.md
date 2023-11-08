@@ -55,6 +55,8 @@ To bring this application to life, we have outlined the following roadmap:
 - Javascript
 - Tailwind
 - Vite
+- Ract-Google-Maps
+- Material Tailwind
 - **APIs**: Google Places API, Google Maps API
 
 ## Getting Started
