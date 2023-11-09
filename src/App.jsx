@@ -5,17 +5,36 @@ import { useEffect, useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 import RouteGenerator from './components/RouteGenerator';
 
-
 function App() {
   const API_KEY = import.meta.env.VITE_GOOGLE_PLACES_KEY;
 
   const [center, setCenter] = useState({ lat: 5.551475, lng: -0.194492 });
+  const [map, setMap] = useState(/** @type google.maps.Map */(null))
+  const [route, setRoute] = useState({
+    location: "",
+    interest: ""
+  });
+
+
+  const handleChange = (/**@type React.ChangeEvent<HTMLInputElement>*/e) => {
+    const { name, value } = e.target
+    setRoute({
+      ...route,
+      [name]: value
+    })
+  }
+
+  const clearRouteValues = () => {
+    setRoute({
+      location: "",
+      interest: ""
+    })
+  }
 
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: API_KEY,
   });
 
-  const [map, setMap] = useState(/** @type google.maps.Map */(null))
 
   useEffect(() => {
     // Check if the Geolocation API is available in the user's browser
@@ -63,7 +82,7 @@ function App() {
   return (
     <>
       <div className='h-screen relative flex flex-col'>
-        <RouteGenerator center={center} map={map} />
+        <RouteGenerator route={route} clearRouteValues={clearRouteValues} handleChange={handleChange} center={center} map={map} />
         <GoogleMap
           options={{
             zoomControl: false,
