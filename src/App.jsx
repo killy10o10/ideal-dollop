@@ -15,6 +15,8 @@ function App() {
     googleMapsApiKey: API_KEY,
   });
 
+  const [map, setMap] = useState(/** @type google.maps.Map */(null))
+
   useEffect(() => {
     // Check if the Geolocation API is available in the user's browser
     if ('geolocation' in navigator) {
@@ -61,7 +63,7 @@ function App() {
   return (
     <>
       <div className='h-screen relative flex flex-col'>
-        <RouteGenerator />
+        <RouteGenerator center={center} map={map} />
         <GoogleMap
           options={{
             zoomControl: false,
@@ -72,6 +74,7 @@ function App() {
           center={center}
           zoom={15}
           mapContainerStyle={{ width: '100%', height: '100%' }}
+          onLoad={(map) => setMap(map)}
         >
           <Marker position={center} />
         </GoogleMap>

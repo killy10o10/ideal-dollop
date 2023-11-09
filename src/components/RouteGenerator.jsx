@@ -1,10 +1,26 @@
+/* eslint-disable react/prop-types */
 import { Input } from '@material-tailwind/react';
 import { CiSearch } from 'react-icons/ci';
 import { AiOutlineClose } from 'react-icons/ai';
 import { SlLocationPin } from 'react-icons/sl';
 import { TbLocationFilled } from 'react-icons/tb';
 
-function RouteGenerator() {
+
+/**
+ * @typedef {Object} RouteGeneratorProps
+ * @property {{ lat: number, lng: number }} center 
+ * @property {google.maps.Map | null} map 
+ */
+
+/**
+ * RouteGenerator component.
+ * @param {RouteGeneratorProps} props 
+ */
+
+
+function RouteGenerator(props) {
+  const { center, map } = props
+
   return (
     <div className='bg-white self-center justify-self-center absolute top-10 rounded p-4 z-50 flex flex-col gap-6'>
       <div className='flex flex-col md:flex-row gap-3'>
@@ -26,7 +42,7 @@ function RouteGenerator() {
       <div className='flex items-center justify-between'>
         <p>Distance:</p>
         <p>Duration:</p>
-        <button className='bg-blue-gray-50 hover:bg-gray-300 rounded-full border-2 border-blue-500 p-2 flex items-center active:scale-95 transition-all'>
+        <button onClick={() => map.panTo(center)} className='bg-blue-gray-50 hover:bg-gray-300 rounded-full border-2 border-blue-500 p-2 flex items-center active:scale-95 transition-all'>
           <TbLocationFilled />
         </button>
       </div>
