@@ -8,7 +8,7 @@ import RouteGenerator from './components/RouteGenerator';
 function App() {
   const API_KEY = import.meta.env.VITE_GOOGLE_PLACES_KEY;
 
-  const [center, setCenter] = useState({ lat: 5.551475, lng: -0.194492 });
+  const [center, setCenter] = useState(null);
   const [map, setMap] = useState(/** @type google.maps.Map */(null))
   const [route, setRoute] = useState({
     location: "",
@@ -72,7 +72,7 @@ function App() {
     }
   }, []);
 
-  if (!isLoaded) {
+  if (!isLoaded || center === null) {
     return (
       <div className='h-screen flex flex-col items-center justify-center'>
         <Spinner className='h-16 w-16 text-gray-900/50' />
@@ -95,7 +95,7 @@ function App() {
           mapContainerStyle={{ width: '100%', height: '100%' }}
           onLoad={(map) => setMap(map)}
         >
-          <Marker position={center} />
+          {center && <Marker position={center} />}
         </GoogleMap>
       </div>
       <Toaster />
