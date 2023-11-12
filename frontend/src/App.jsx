@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 import { Spinner } from '@material-tailwind/react';
-import { useJsApiLoader, GoogleMap, Marker } from '@react-google-maps/api';
+import { useJsApiLoader, GoogleMap, MarkerF } from '@react-google-maps/api';
 import { useEffect, useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 import RouteGenerator from './components/RouteGenerator';
@@ -95,7 +95,9 @@ function App() {
           mapContainerStyle={{ width: '100%', height: '100%' }}
           onLoad={(map) => setMap(map)}
         >
-          {center && <Marker position={center} />}
+          {center && <div>
+            <MarkerF position={center} />
+          </div>}
         </GoogleMap>
       </div>
       <Toaster />
