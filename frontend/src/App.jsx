@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 import { Spinner } from '@material-tailwind/react';
-import { useJsApiLoader, GoogleMap, MarkerF } from '@react-google-maps/api';
-import { useEffect, useState } from 'react';
+import { useJsApiLoader, GoogleMap, MarkerF, DirectionsRenderer } from '@react-google-maps/api';
+import { useEffect, useRef, useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 import RouteGenerator from './components/RouteGenerator';
 
@@ -10,25 +10,35 @@ function App() {
 
   const [center, setCenter] = useState(null);
   const [map, setMap] = useState(/** @type google.maps.Map */(null))
-  const [route, setRoute] = useState({
-    location: "",
-    interest: ""
-  });
+
+  /**@type React.MutableRefObject<HTMLInputElement> */
+  const locationRef = useRef()
+  /**@type React.MutableRefObject<HTMLInputElement> */
+  const destinationRef = useRef()
+
+  const [directionResponse, setDirectionResponse] = useState(null)
 
 
-  const handleChange = (/**@type React.ChangeEvent<HTMLInputElement>*/e) => {
-    const { name, value } = e.target
-    setRoute({
-      ...route,
-      [name]: value
+
+  const calculateRoute = async () => {
+    if (locationRef.current.value === '' || destinationRef.current.value === '') {
+      return
+    }
+    const directionsService = new google.maps.DirectionsService();
+    const results = await directionsService.route({
+      origin: locationRef.current.value,
+      destination: destinationRef.current.value,
+      travelMode: google.maps.TravelMode.DRIVING
     })
+    setDirectionResponse(results)
+
   }
 
+
+
   const clearRouteValues = () => {
-    setRoute({
-      location: "",
-      interest: ""
-    })
+    locationRef.current.value = ''
+    destinationRef.current.value = ''
   }
 
   const { isLoaded } = useJsApiLoader({
@@ -83,7 +93,7 @@ function App() {
   return (
     <>
       <div className='h-screen relative flex flex-col'>
-        <RouteGenerator route={route} clearRouteValues={clearRouteValues} handleChange={handleChange} center={center} map={map} />
+        <RouteGenerator calculateRoute={calculateRoute} locationRef={locationRef} destinationRef={destinationRef} clearRouteValues={clearRouteValues} center={center} map={map} />
         <GoogleMap
           options={{
             zoomControl: false,
@@ -96,9 +106,8 @@ function App() {
           mapContainerStyle={{ width: '100%', height: '100%' }}
           onLoad={(map) => setMap(map)}
         >
-          {center && <div>
-            <MarkerF position={center} />
-          </div>}
+          {center && <MarkerF position={center} />}
+          {directionResponse && <DirectionsRenderer directions={directionResponse} />}
         </GoogleMap>
       </div>
       <Toaster />
