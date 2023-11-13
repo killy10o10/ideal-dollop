@@ -9,6 +9,8 @@ function App() {
   const API_KEY = import.meta.env.VITE_GOOGLE_PLACES_KEY;
 
   const [center, setCenter] = useState(null);
+  const [duration, setDuration] = useState('')
+  const [distance, setDistance] = useState('')
   const [map, setMap] = useState(/** @type google.maps.Map */(null))
 
   /**@type React.MutableRefObject<HTMLInputElement> */
@@ -31,6 +33,8 @@ function App() {
       travelMode: google.maps.TravelMode.DRIVING
     })
     setDirectionResponse(results)
+    setDistance(results.routes[0].legs[0].distance.text)
+    setDuration(results.routes[0].legs[0].duration.text)
 
   }
 
@@ -39,6 +43,8 @@ function App() {
   const clearRouteValues = () => {
     locationRef.current.value = ''
     destinationRef.current.value = ''
+    setDistance('')
+    setDuration('')
   }
 
   const { isLoaded } = useJsApiLoader({
@@ -93,7 +99,7 @@ function App() {
   return (
     <>
       <div className='h-screen relative flex flex-col'>
-        <RouteGenerator calculateRoute={calculateRoute} locationRef={locationRef} destinationRef={destinationRef} clearRouteValues={clearRouteValues} center={center} map={map} />
+        <RouteGenerator calculateRoute={calculateRoute} duration={duration} distance={distance} locationRef={locationRef} destinationRef={destinationRef} clearRouteValues={clearRouteValues} center={center} map={map} />
         <GoogleMap
           options={{
             zoomControl: false,

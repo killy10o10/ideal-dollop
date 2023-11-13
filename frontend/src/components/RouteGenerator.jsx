@@ -9,6 +9,8 @@ import { Autocomplete } from '@react-google-maps/api'
 /**
  * @typedef {Object} RouteGeneratorProps
  * @property {{ lat: number, lng: number }} center 
+ * @property {string} duration 
+ * @property {string} distance 
  * @property {google.maps.Map | null} map
  * @property {function(): void} clearRouteValues
  * @property {function(): void} calculateRoute
@@ -23,7 +25,7 @@ import { Autocomplete } from '@react-google-maps/api'
 
 
 function RouteGenerator(props) {
-  const { center, map, clearRouteValues, calculateRoute, locationRef, destinationRef } = props
+  const { center, map, clearRouteValues, calculateRoute, locationRef, destinationRef, duration, distance } = props
 
   return (
     <div className='bg-white self-center justify-self-center absolute top-10 rounded p-4 z-50 flex flex-col gap-6'>
@@ -60,8 +62,8 @@ function RouteGenerator(props) {
         </button>
       </div>
       <div className='flex items-center justify-between'>
-        <p>Distance:</p>
-        <p>Duration:</p>
+        <p>Distance: {distance}</p>
+        <p>Duration: {duration}</p>
         <button onClick={() => map.panTo(center)} className='bg-blue-gray-50 hover:bg-gray-300 rounded-full border-2 border-blue-500 p-2 flex items-center active:scale-95 transition-all'>
           <TbLocationFilled />
         </button>
