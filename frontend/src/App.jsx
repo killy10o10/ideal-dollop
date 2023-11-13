@@ -33,6 +33,7 @@ function App() {
 
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: API_KEY,
+    libraries: ['places']
   });
 
 

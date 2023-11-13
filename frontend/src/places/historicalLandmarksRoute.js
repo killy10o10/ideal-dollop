@@ -18,4 +18,6 @@ const historicalLandmarksRoute = {
   ],
 };
 
+// closest 10 places
+
 export default historicalLandmarksRoute;
